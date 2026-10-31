@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blogapp-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blogapp-frontend
+  template:
+    metadata:
+      labels:
+        app: blogapp-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: 057481081655.dkr.ecr.us-east-2.amazonaws.com/blogapp-frontend:v2
+          ports:
+            - containerPort: 8080
+          env:
+            - name: BACKEND_HOST
+              value: backend-service
+            - name: BACKEND_PORT
+              value: "5000"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: blogapp-frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
