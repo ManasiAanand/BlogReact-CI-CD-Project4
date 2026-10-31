@@ -24,17 +24,20 @@ pipeline {
         }
 
         stage('SonarQube Code Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh '''
-                        sonar-scanner \
-                        -Dsonar.projectBaseDir=. \
-                        -Dsonar.projectKey=blogapp-project04 \
-                        -Dsonar.sources=frontend/src,backend/src
-                    '''
-                }
+    steps {
+        script {
+            def scannerHome = tool 'SonarScanner'
+            withSonarQubeEnv('SonarQube') {
+                sh """
+                    ${scannerHome}/bin/sonar-scanner \
+                    -Dsonar.projectKey=blogapp-project04 \
+                    -Dsonar.projectName='Blog Application Project 04' \
+                    -Dsonar.sources=frontend/src,backend/src
+                """
             }
         }
+    }
+}
 
         stage('Build Docker Images') {
             steps {
