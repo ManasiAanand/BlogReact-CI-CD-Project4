@@ -23,6 +23,19 @@ pipeline {
             }
         }
 
+        stage('SonarQube Code Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh '''
+                        sonar-scanner \
+                        -Dsonar.projectBaseDir=. \
+                        -Dsonar.projectKey=blogapp-project04 \
+                        -Dsonar.sources=frontend/src,backend/src
+                    '''
+                }
+            }
+        }
+
         stage('Build Docker Images') {
             steps {
                 sh '''
