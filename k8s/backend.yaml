@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: 057481081655.dkr.ecr.us-east-2.amazonaws.com/blogapp-backend:v1
+          image: 057481081655.dkr.ecr.us-east-2.amazonaws.com/blogapp-backend:v7
           ports:
             - containerPort: 5000
           env:

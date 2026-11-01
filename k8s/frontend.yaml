@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: 057481081655.dkr.ecr.us-east-2.amazonaws.com/blogapp-frontend:v2
+          image: 057481081655.dkr.ecr.us-east-2.amazonaws.com/blogapp-frontend:v7
           ports:
             - containerPort: 8080
           env:
