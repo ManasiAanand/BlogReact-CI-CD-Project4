@@ -97,5 +97,38 @@ pipeline {
                 '''
             }
         }
+
+        stage('Deploy to Amazon EKS') {
+            steps {
+                sh '''
+                    set -e
+
+                    AWS_REGION=us-east-2
+                    CLUSTER_NAME=project04-eks
+                    ECR_REGISTRY=057481081655.dkr.ecr.${AWS_REGION}.amazonaws.com
+
+                    echo "Configuring EKS access..."
+                    aws eks update-kubeconfig \
+                        --region ${AWS_REGION} \
+                        --name ${CLUSTER_NAME}
+
+                    echo "Deploying frontend..."
+                    kubectl set image deployment/blogapp-frontend \
+                        frontend=${ECR_REGISTRY}/blogapp-frontend:build-${BUILD_NUMBER}
+
+                    echo "Deploying backend..."
+                    kubectl set image deployment/blogapp-backend \
+                        backend=${ECR_REGISTRY}/blogapp-backend:build-${BUILD_NUMBER}
+
+                    echo "Waiting for frontend rollout..."
+                    kubectl rollout status deployment/blogapp-frontend --timeout=180s
+
+                    echo "Waiting for backend rollout..."
+                    kubectl rollout status deployment/blogapp-backend --timeout=180s
+
+                    echo "EKS deployment completed successfully!"
+                '''
+            }
+        }
     }
 }
