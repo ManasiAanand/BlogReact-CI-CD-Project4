@@ -1,0 +1,12 @@
+.git
+.gitignore
+.github
+**/node_modules
+**/npm-debug.log*
+**/.env
+**/.env.*
+**/coverage
+**/dist
+**/.DS_Store
+Jenkinsfile.backup
+Jenkinsfile.before-eks
