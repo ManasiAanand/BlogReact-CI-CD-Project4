@@ -64,7 +64,7 @@ export default function Home() {
           </div>
         </div>
 
-        {error && <div className="state-msg">Couldn't reach the API — {error}</div>}
+        {error && <div className="state-msg">Couldn&apos;t reach the API — {error}</div>}
 
         {loading ? (
           <div className="post-grid">

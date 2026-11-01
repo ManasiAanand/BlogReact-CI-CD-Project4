@@ -5,3 +5,9 @@ node_modules/
 dist/
 build/
 *.log
+# Test coverage reports
+backend/coverage/
+
+# Jenkins backup files
+Jenkinsfile.backup
+Jenkinsfile.before-eks
