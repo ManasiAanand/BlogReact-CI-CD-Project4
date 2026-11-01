@@ -20,6 +20,52 @@ pipeline {
             }
         }
 
+
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                    set -e
+                    node --version
+                    npm --version
+
+                    cd frontend
+                    npm ci
+
+                    cd ../backend
+                    npm ci
+                '''
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                dir('frontend') {
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Lint Code') {
+            steps {
+                sh '''
+                    set -e
+                    cd frontend
+                    npm run lint
+
+                    cd ../backend
+                    npm run lint
+                '''
+            }
+        }
+
+        stage('Test Backend') {
+            steps {
+                dir('backend') {
+                    sh 'npm test'
+                }
+            }
+        }
+
         stage('SonarQube Code Analysis') {
             steps {
                 script {
